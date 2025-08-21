@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY PORTFOLIO</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    section {
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h2 {
+      color: #333;
+    }
+    .card {
+      background: #fff;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input, textarea, select, button {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .todo-item {
+      display: flex;
+      justify-content: space-between;
+      background: #f9f9f9;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+    }
+    .product-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 15px;
+      background: #fff;
+      margin-bottom: 15px;
+    }
+    footer {
+      background: #333;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header / Navigation -->
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- About Section -->
+  <section id="about" class="card">
+    <h2>About Me</h2>
+    <p>
+        I’m a student who is passionate about Web Development and excited to build creative and functional projects. I enjoy working with HTML, CSS, and JavaScript to design responsive websites and interactive applications. By building different tasks and projects, I’ve been able to apply my learning in practical ways and improve step by step. My aim is to keep learning modern technologies, sharpen my problem-solving skills, and grow into a professional web developer
+    </p>
+  </section>
+
+  <section id="projects">
+    <h2>Projects</h2>
+
+    <div class="card">
+      <h3>To-Do List with Local Storage)</h3>
+      <input type="text" id="todo-input" placeholder="Add a task...">
+      <button onclick="addTask()">Add Task</button>
+      <div id="todo-list"></div>
+    </div>
+
+    <div class="card">
+      <h3>Product Listing with Filters and Sorting</h3>
+      <label for="category">Filter by Category:</label>
+      <select id="category" onchange="renderProducts()">
+        <option value="all">All</option>
+        <option value="laptop">Laptop</option>
+        <option value="phone">Phone</option>
+        <option value="audio">Audio</option>
+      </select>
+      <label for="sort">Sort by:</label>
+      <select id="sort" onchange="renderProducts()">
+        <option value="default">Default</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Rating</option>
+      </select>
+      <div id="product-list"></div>
+    </div>
+  </section>
+  <section id="contact" class="card">
+    <h2>Contact</h2>
+    <form>
+      <input type="text" placeholder="Name" required>
+      <input type="email" placeholder="Email" required>
+      <input placeholder="contact number" required>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+  <footer>
+    <p>© 2025 Copy Right Reserved| Built with HTML, CSS, JavaScript</p>
+  </footer>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      const list = document.getElementById('todo-list');
+      list.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const div = document.createElement('div');
+        div.className = 'todo-item';
+        div.innerHTML = `<span>${task}</span><button onclick="deleteTask(${index})">delete</button>`;
+        list.appendChild(div);
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function addTask() {
+      const input = document.getElementById('todo-input');
+      if (input.value.trim() !== '') {
+        tasks.push(input.value.trim());
+        input.value = '';
+        renderTasks();
+      }
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      renderTasks();
+    }
+
+    renderTasks();
+
+    // Note Taking with Local Storage
+    
+    // Product Listing Data
+    const products = [
+      { name: 'boult air podes', category: 'audio', price: 999, rating: 4.6 },
+      { name: 'pple air podes', category: 'audio', price: 84999, rating: 4.4 },
+      { name: 'Mac book', category: 'lappie', price: 223999, rating: 4.1 },
+      { name: 'Studio Max Headphones', category: 'audio', price: 24999, rating: 4.8 },
+      { name: 'UltraBook 15"', category: 'laptop', price: 109999, rating: 4.7 },
+      { name: 'Nova One', category: 'phone', price: 29999, rating: 4.2 }
+    ];
+
+    function renderProducts() {
+      const list = document.getElementById('product-list');
+      const category = document.getElementById('category').value;
+      const sort = document.getElementById('sort').value;
+      let filtered = products.filter(p => category === 'all' || p.category === category);
+
+      if (sort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+      if (sort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+      if (sort === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+
+      list.innerHTML = '';
+      filtered.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'product-card';
+        div.innerHTML = `<h4>${p.name}</h4><p>Category: ${p.category}</p><p>Price: ₹${p.price}</p><p>Rating: ${p.rating}★</p>`;
+        list.appendChild(div);
+      });
+    }
+
+    renderProducts();
+  </script>
+</body>
+</html>
